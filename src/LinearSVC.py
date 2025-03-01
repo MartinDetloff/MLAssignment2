@@ -5,8 +5,9 @@ from sklearn import datasets
 import matplotlib.pyplot as plt
 from sklearn.inspection import DecisionBoundaryDisplay
 
+
 class LinearSVC():
-    def __init__(self, learningRate=0.01, n_iter=50, random_state=1, C = 1):
+    def __init__(self, learningRate=0.01, n_iter=50, random_state=1, C=1):
         self.learningRate = learningRate
         self.n_iter = n_iter
         self.random_state = random_state
@@ -29,7 +30,6 @@ class LinearSVC():
         self.w_ = rgen.normal(loc=0.0, scale=0.01, size=X.shape[1])
         self.b_ = np.float64(0.)
 
-
         for iteration in range(self.n_iter):
             errors = 0
             for xi, target in zip(X, y):
@@ -40,16 +40,16 @@ class LinearSVC():
 
                 else:
                     errors += 1
-                    self.w_ -= self.learningRate * (self.w_ - self.C * target * xi) # gradient with respect to the weights
-                    self.b_ += self.learningRate * self.C * target # gradient with respect to the bias
-            print("This is the amount of bad predictions after ", iteration , "iterations ", errors)
+                    self.w_ -= self.learningRate * (
+                                self.w_ - self.C * target * xi)  # gradient with respect to the weights
+                    self.b_ += self.learningRate * self.C * target  # gradient with respect to the bias
+            print("This is the amount of bad predictions after ", iteration, "iterations ", errors)
 
         return self
 
-
-
     ''' Linear Activation Function  
     '''
+
     def activation(self, X):
         """Compute linear activation"""
         return X
@@ -64,7 +64,6 @@ class LinearSVC():
     def predict(self, X):
         """Return class label after unit step"""
         return np.sign(np.dot(X, self.w_) + self.b_)
-
 
 
 def plot_decision_regions(X, y, classifier, resolution=0.02, show_after=False):
@@ -94,26 +93,27 @@ def plot_decision_regions(X, y, classifier, resolution=0.02, show_after=False):
                     ,
                     edgecolor='black')
 
-df = pd.DataFrame(datasets.load_iris(as_frame=True).data)
+if __name__ == '__main__':
+    df = pd.DataFrame(datasets.load_iris(as_frame=True).data)
 
-# select setosa and versicolor
-df = pd.read_csv(
-    '../iris.data',
-    header=None, encoding='utf-8')
+    # select setosa and versicolor
+    df = pd.read_csv(
+        '../iris.data',
+        header=None, encoding='utf-8')
 
-# select setosa and versicolor
-y = df.iloc[0:100, 4].values
+    # select setosa and versicolor
+    y = df.iloc[0:100, 4].values
 
-y = np.where(y == 'Iris-setosa', -1, 1)
-# extract sepal length and petal length
+    y = np.where(y == 'Iris-setosa', -1, 1)
+    # extract sepal length and petal length
 
-X = df.iloc[0:100, [0,2]].values
+    X = df.iloc[0:100, [0, 2]].values
 
-LinearSVC = LinearSVC()
-LinearSVC.fit(X, y)
-plot_decision_regions(X, y, LinearSVC)
+    LinearSVC = LinearSVC()
+    LinearSVC.fit(X, y)
+    plot_decision_regions(X, y, LinearSVC)
 
-plt.title('SVM Decision Boundary')
-plt.xlabel('Sepal length [cm]')
-plt.ylabel('Petal length [cm]')
-plt.show()
+    plt.title('SVM Decision Boundary')
+    plt.xlabel('Sepal length [cm]')
+    plt.ylabel('Petal length [cm]')
+    plt.show()
