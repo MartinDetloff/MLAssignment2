@@ -26,44 +26,39 @@ class LinearSVC():
                ------
                self : object
                """
+
         rgen = np.random.RandomState(self.random_state)
         self.w_ = rgen.normal(loc=0.0, scale=0.01, size=X.shape[1])
         self.b_ = np.float64(0.)
 
         for iteration in range(self.n_iter):
+
             errors = 0
             for xi, target in zip(X, y):
-                # print("This is the loss " , self.predict(xi, target))
+                # print("This is the loss " , self.net_input(xi))
+                # print("This is the weights " , self.w_)
 
                 if self.hingeLoss(xi, target) <= 0:
-                    continue
+                    self.w_ += self.learningRate * self.w_
 
                 else:
                     errors += 1
-                    self.w_ -= self.learningRate * (
-                                self.w_ - self.C * target * xi)  # gradient with respect to the weights
-                    self.b_ += self.learningRate * self.C * target  # gradient with respect to the bias
+                    self.w_ -= self.learningRate * (self.w_ - self.C * target * xi)  # gradient with respect to the weights
+                    self.b_ -= self.learningRate * (self.C * -target)  # gradient with respect to the bias
             print("This is the amount of bad predictions after ", iteration, "iterations ", errors)
 
         return self
-
-    ''' Linear Activation Function  
-    '''
-
-    def activation(self, X):
-        """Compute linear activation"""
-        return X
 
     def net_input(self, X):
         """Calculate net input"""
         return np.dot(X, self.w_) + self.b_
 
     def hingeLoss(self, X, yi):
-        return self.C * max(0, 1 - yi * self.predict(X))
+        return max(0, 1 - yi * self.net_input(X))
 
     def predict(self, X):
         """Return class label after unit step"""
-        return np.sign(np.dot(X, self.w_) + self.b_)
+        return np.sign(self.net_input(X))
 
 
 def plot_decision_regions(X, y, classifier, resolution=0.02, show_after=False):
