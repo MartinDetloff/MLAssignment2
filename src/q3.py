@@ -14,7 +14,7 @@ random_seed = 1
 
 for d in dimensions:
     for n in num_samples:
-        X_train, X_test, y_train, y_test = make_classification(d, n, 1.0, random_seed)
+        X_train, X_test, y_train, y_test = make_classification(d, n, 100.0, random_seed)
         svc = LinearSVC()
         start_time = time.process_time()
         svc.fit(X_train, y_train)

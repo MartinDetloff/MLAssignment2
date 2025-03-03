@@ -7,7 +7,7 @@ from sklearn.inspection import DecisionBoundaryDisplay
 
 
 class LinearSVC():
-    def __init__(self, learningRate=0.01, n_iter=50, random_state=1, C=1):
+    def __init__(self, learningRate=0.001, n_iter=50, random_state=1, C=10000):
         self.learningRate = learningRate
         self.n_iter = n_iter
         self.random_state = random_state
@@ -40,11 +40,11 @@ class LinearSVC():
 
                 if self.hingeLoss(xi, target) <= 0:
                     self.w_ += self.learningRate * self.w_
-
+                    # continue
                 else:
                     errors += 1
-                    self.w_ -= self.learningRate * (self.w_ - self.C * target * xi)  # gradient with respect to the weights
-                    self.b_ -= self.learningRate * (self.C * -target)  # gradient with respect to the bias
+                    self.w_ -= (self.learningRate * self.w_) - (self.C * target * xi)  # gradient with respect to the weights
+                    self.b_ += self.learningRate * (self.C * target)  # gradient with respect to the bias
             print("This is the amount of bad predictions after ", iteration, "iterations ", errors)
 
         return self
