@@ -29,10 +29,12 @@ if __name__ == "__main__":
         plt.title('Training dataset')
         plt.xlabel('x_1')
         plt.ylabel('x_2')
+        plt.savefig('training-dataset.eps')
         plt.show()
 
         plt.scatter(X_test[:, 0], X_test[:, 1], c=y_test)
         plt.title('Test dataset')
         plt.xlabel('x_1')
         plt.ylabel('x_2')
+        plt.savefig('test-dataset.eps')
         plt.show()
